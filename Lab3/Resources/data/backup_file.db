@@ -1,0 +1,143 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema db_book
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema db_book
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `db_book` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `db_book` ;
+
+-- -----------------------------------------------------
+-- Table `db_book`.`suppliers`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_book`.`suppliers` (
+  `Supplier_ID` INT NOT NULL AUTO_INCREMENT,
+  `Company_Name` VARCHAR(255) NOT NULL,
+  `Contact_Person` VARCHAR(255) NULL DEFAULT NULL,
+  `Phone` VARCHAR(15) NULL DEFAULT NULL,
+  `Email` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`Supplier_ID`),
+  UNIQUE INDEX `Email` (`Email` ASC) VISIBLE,
+  INDEX `book_idx` (`Company_Name` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `db_book`.`books`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_book`.`books` (
+  `Book_ID` INT NOT NULL AUTO_INCREMENT,
+  `Title` VARCHAR(255) NOT NULL,
+  `Author` VARCHAR(255) NOT NULL,
+  `ISBN` VARCHAR(13) NOT NULL,
+  `Publication_Year` INT NOT NULL,
+  `Price` DECIMAL(10,2) NOT NULL,
+  `Stock` INT NOT NULL,
+  `suppliers` VARCHAR(45) NOT NULL DEFAULT 'Andrey and CO',
+  PRIMARY KEY (`Book_ID`, `suppliers`),
+  INDEX `bbbb_idx` (`suppliers` ASC) VISIBLE,
+  CONSTRAINT `bbbb`
+    FOREIGN KEY (`suppliers`)
+    REFERENCES `db_book`.`suppliers` (`Company_Name`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 590
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `db_book`.`customers`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_book`.`customers` (
+  `Customer_ID` INT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(255) NOT NULL,
+  `Email` VARCHAR(255) NOT NULL,
+  `Phone` VARCHAR(15) NULL DEFAULT NULL,
+  `Address` TEXT NULL DEFAULT NULL,
+  PRIMARY KEY (`Customer_ID`),
+  UNIQUE INDEX `Email` (`Email` ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `db_book`.`orders`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_book`.`orders` (
+  `Order_ID` INT NOT NULL AUTO_INCREMENT,
+  `Customer_ID` INT NULL DEFAULT NULL,
+  `Order_Date` DATE NOT NULL,
+  `Status` VARCHAR(50) NOT NULL,
+  `Total_Amount` DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (`Order_ID`),
+  INDEX `Customer_ID` (`Customer_ID` ASC) VISIBLE,
+  CONSTRAINT `orders_ibfk_1`
+    FOREIGN KEY (`Customer_ID`)
+    REFERENCES `db_book`.`customers` (`Customer_ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `db_book`.`ordered_items`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_book`.`ordered_items` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `Order_ID` INT NULL DEFAULT NULL,
+  `Book_ID` INT NULL DEFAULT NULL,
+  `Quantity` INT NOT NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `Order_ID` (`Order_ID` ASC) VISIBLE,
+  INDEX `Book_ID` (`Book_ID` ASC) VISIBLE,
+  CONSTRAINT `ordered_items_ibfk_1`
+    FOREIGN KEY (`Order_ID`)
+    REFERENCES `db_book`.`orders` (`Order_ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `ordered_items_ibfk_2`
+    FOREIGN KEY (`Book_ID`)
+    REFERENCES `db_book`.`books` (`Book_ID`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `db_book`.`users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `db_book`.`users` (
+  `User_ID` INT NOT NULL AUTO_INCREMENT,
+  `Username` VARCHAR(50) NOT NULL,
+  `Password` VARCHAR(50) NOT NULL,
+  `Role` ENUM('Admin', 'User') NOT NULL DEFAULT 'User',
+  PRIMARY KEY (`User_ID`),
+  UNIQUE INDEX `Username_UNIQUE` (`Username` ASC) VISIBLE,
+  UNIQUE INDEX `Password_UNIQUE` (`Password` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 7
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

@@ -35,6 +35,8 @@
             this.comboBoxRole = new System.Windows.Forms.ComboBox();
             this.textBoxUserId = new System.Windows.Forms.TextBox();
             this.buttonDelete = new System.Windows.Forms.Button();
+            this.BackupButton = new System.Windows.Forms.Button();
+            this.RestoreButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -98,11 +100,34 @@
             this.buttonDelete.UseVisualStyleBackColor = true;
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click_1);
             // 
+            // BackupButton
+            // 
+            this.BackupButton.Location = new System.Drawing.Point(624, 337);
+            this.BackupButton.Name = "BackupButton";
+            this.BackupButton.Size = new System.Drawing.Size(75, 74);
+            this.BackupButton.TabIndex = 7;
+            this.BackupButton.Text = "Сделать бэкап бд";
+            this.BackupButton.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.BackupButton.UseVisualStyleBackColor = true;
+            this.BackupButton.Click += new System.EventHandler(this.BackupButton_Click);
+            // 
+            // RestoreButton
+            // 
+            this.RestoreButton.Location = new System.Drawing.Point(715, 337);
+            this.RestoreButton.Name = "RestoreButton";
+            this.RestoreButton.Size = new System.Drawing.Size(75, 73);
+            this.RestoreButton.TabIndex = 8;
+            this.RestoreButton.Text = "Загрузить бэкап";
+            this.RestoreButton.UseVisualStyleBackColor = true;
+            this.RestoreButton.Click += new System.EventHandler(this.RestoreButton_Click);
+            // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.RestoreButton);
+            this.Controls.Add(this.BackupButton);
             this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.textBoxUserId);
             this.Controls.Add(this.comboBoxRole);
@@ -128,5 +153,7 @@
         private System.Windows.Forms.ComboBox comboBoxRole;
         private System.Windows.Forms.TextBox textBoxUserId;
         private System.Windows.Forms.Button buttonDelete;
+        private System.Windows.Forms.Button BackupButton;
+        private System.Windows.Forms.Button RestoreButton;
     }
 }
