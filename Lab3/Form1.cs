@@ -1,13 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace Lab3
 {
@@ -23,11 +17,10 @@ namespace Lab3
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string connectionString = "Server=localhost;Database=db_book;User ID=admin;Password=admin;SslMode=Required;";
-            string username = textBox1.Text;
+          string username = textBox1.Text;
             string password = textBox2.Text;
-
-            AuthService authService = new AuthService(connectionString);
+            DatabaseHelper dbHelper = new DatabaseHelper();
+            AuthService authService = new AuthService(dbHelper.GetConnectionString());
 
             string role = authService.AuthenticateUser(username, password);
 
