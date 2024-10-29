@@ -24,14 +24,31 @@ namespace Lab3
         private void button1_Click(object sender, EventArgs e)
         {
             string connectionString = "Server=localhost;Database=db_book;User ID=admin;Password=admin;SslMode=Required;";
-            Database db = new Database(connectionString);
-            db.OpenConnection();
-            MySqlCommand command = new MySqlCommand("SELECT * FROM Books", db.GetConnection());
-            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
-            DataTable table = new DataTable();
-            adapter.Fill(table);
-            dataGridView1.DataSource = table;
-            db.CloseConnection();
+            string username = textBox1.Text;
+            string password = textBox2.Text;
+
+            AuthService authService = new AuthService(connectionString);
+
+            string role = authService.AuthenticateUser(username, password);
+
+            if (role == "User")
+            {
+                MessageBox.Show("Вход выполнен как пользователь!");
+                UserForm userForm = new UserForm(); // Создайте и откройте форму для пользователя
+                userForm.Show();
+                this.Hide(); // Скрыть текущую форму
+            }
+            else if (role == "Admin")
+            {
+                MessageBox.Show("Вход выполнен как администратор!");
+                AdminForm adminForm = new AdminForm(); // Создайте и откройте форму для администратора
+                adminForm.Show();
+                this.Hide(); // Скрыть текущую форму
+            }
+            else
+            {
+                MessageBox.Show("Неверный логин или пароль.");
+            }
         }
     }
 }
